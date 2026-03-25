@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   String titulo = "Hola, Flutter";
   bool _isTitleChanged = false;
+  int _counter = 0; // contador
   late AnimationController _animController;
   late Animation<double> _scaleAnim;
 
@@ -43,8 +44,8 @@ class _HomePageState extends State<HomePage>
   static const Color kCard    = Color(0xFF2A2A3E);
   static const Color kText    = Color(0xFFE0E0F0);
   static const Color kSubtext = Color(0xFF9090B0);
+  static const Color kGreen   = Color(0xFF43E8A0);
 
-  // Ambas imágenes vienen de la red — sin assets locales
   static const String _imgNetwork =
       "https://storage.googleapis.com/cms-storage-bucket/0dbfcc7a59cd1cf16282.png";
   static const String _imgAsset =
@@ -103,6 +104,9 @@ class _HomePageState extends State<HomePage>
     }
   }
 
+  void _incrementCounter() => setState(() => _counter++);
+  void _decrementCounter() => setState(() => _counter--);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,6 +127,8 @@ class _HomePageState extends State<HomePage>
               _buildInfoContainer(),
               const SizedBox(height: 20),
               _buildListSection(),
+              const SizedBox(height: 20),
+              _buildCounterSection(),
               const SizedBox(height: 24),
             ],
           ),
@@ -225,7 +231,7 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  // ─── Fila de imágenes (ambas desde red) ───────────────────────────────────
+  // ─── Fila de imágenes ─────────────────────────────────────────────────────
   Widget _buildImagesRow() {
     return Row(
       children: [
@@ -278,7 +284,7 @@ class _HomePageState extends State<HomePage>
                   ),
                 );
               },
-              errorBuilder: (_, _, _) => Container(
+              errorBuilder: (_, e, __) => Container(
                 width: 72,
                 height: 72,
                 decoration: BoxDecoration(
@@ -412,7 +418,7 @@ class _HomePageState extends State<HomePage>
     final items = [
       {"icon": Icons.rocket_launch_rounded, "title": "Elemento 1", "sub": "Flutter es multiplataforma",  "color": kPrimary},
       {"icon": Icons.palette_rounded,       "title": "Elemento 2", "sub": "Diseño personalizable",       "color": kAccent},
-      {"icon": Icons.bolt_rounded,          "title": "Elemento 3", "sub": "Rendimiento nativo",          "color": const Color(0xFF43E8A0)},
+      {"icon": Icons.bolt_rounded,          "title": "Elemento 3", "sub": "Rendimiento nativo",          "color": kGreen},
     ];
 
     return Column(
@@ -434,7 +440,7 @@ class _HomePageState extends State<HomePage>
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           itemCount: items.length,
-          separatorBuilder: (_, _) => const SizedBox(height: 10),
+          separatorBuilder: (_, i) => const SizedBox(height: 10),
           itemBuilder: (context, index) {
             final item  = items[index];
             final color = item["color"] as Color;
@@ -475,6 +481,146 @@ class _HomePageState extends State<HomePage>
           },
         ),
       ],
+    );
+  }
+
+  // ─── Sección contador ─────────────────────────────────────────────────────
+  Widget _buildCounterSection() {
+    // Determina color del número según valor
+    final Color counterColor = _counter > 0
+        ? kGreen
+        : _counter < 0
+            ? kAccent
+            : kSubtext;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+      decoration: BoxDecoration(
+        color: kCard,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.06)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.2),
+            blurRadius: 12,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Título
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.tag_rounded, color: kSubtext, size: 16),
+              const SizedBox(width: 6),
+              const Text(
+                "Contador",
+                style: TextStyle(
+                  color: kSubtext,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 1.2,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+
+          // Número animado
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 250),
+            transitionBuilder: (child, anim) => ScaleTransition(
+              scale: anim,
+              child: FadeTransition(opacity: anim, child: child),
+            ),
+            child: Text(
+              "$_counter",
+              key: ValueKey(_counter),
+              style: TextStyle(
+                color: counterColor,
+                fontSize: 64,
+                fontWeight: FontWeight.w800,
+                letterSpacing: -2,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Botones
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // Botón disminuir
+              _counterButton(
+                icon: Icons.remove_rounded,
+                color: kAccent,
+                onTap: _decrementCounter,
+              ),
+              const SizedBox(width: 20),
+
+              // Botón reset
+              GestureDetector(
+                onTap: () => setState(() => _counter = 0),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.06),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: Colors.white.withOpacity(0.1)),
+                  ),
+                  child: const Text(
+                    "Reset",
+                    style: TextStyle(
+                      color: kSubtext,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(width: 20),
+
+              // Botón aumentar
+              _counterButton(
+                icon: Icons.add_rounded,
+                color: kGreen,
+                onTap: _incrementCounter,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _counterButton({
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.15),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: color.withOpacity(0.3)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withOpacity(0.2),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Icon(icon, color: color, size: 26),
+      ),
     );
   }
 }
