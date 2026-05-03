@@ -7,115 +7,197 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'App Distribución v1.0.0',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/about': (context) => const AboutPage(),
+        '/detail': (context) => const DetailPage(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+// ─────────────────────────────────────────────
+// PANTALLA 1 – Home
+// ─────────────────────────────────────────────
+class HomePage extends StatelessWidget {
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
+        title: const Text('Inicio'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+            const Icon(Icons.rocket_launch, size: 80, color: Colors.deepPurple),
+            const SizedBox(height: 24),
+            const Text(
+              'Hola!',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8),
+            const Text(
+              'Ejemplo para distribucion de Apps con Firebase',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 40),
+
+            // Botón → Detalle
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/detail'),
+              icon: const Icon(Icons.list_alt),
+              label: const Text('Ver Detalle'),
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            // Botón → Acerca de
+            OutlinedButton.icon(
+              onPressed: () => Navigator.pushNamed(context, '/about'),
+              icon: const Icon(Icons.info_outline),
+              label: const Text('Acerca de'),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                textStyle: const TextStyle(fontSize: 16),
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+}
+
+
+class DetailPage extends StatelessWidget {
+  const DetailPage({super.key});
+
+  static const List<Map<String, dynamic>> _items = [
+    {'icon': Icons.looks_one, 'title': 'Paso 1', 'desc': 'flutter build apk'},
+    {'icon': Icons.looks_two, 'title': 'Paso 2', 'desc': 'Subir APK a Firebase'},
+    {'icon': Icons.looks_3, 'title': 'Paso 3', 'desc': 'Agregar testers al grupo QA_Clase'},
+    {'icon': Icons.looks_4, 'title': 'Paso 4', 'desc': 'Distribuir y copiar enlace'},
+    {'icon': Icons.looks_5, 'title': 'Paso 5', 'desc': 'Instalar en dispositivo físico'},
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pasos de distribución'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(16),
+        itemCount: _items.length,
+        separatorBuilder: (_, __) => const Divider(),
+        itemBuilder: (context, index) {
+          final item = _items[index];
+          return ListTile(
+            leading: Icon(item['icon'] as IconData,
+                color: Colors.deepPurple, size: 32),
+            title: Text(item['title'] as String,
+                style: const TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Text(item['desc'] as String),
+            trailing: const Icon(Icons.chevron_right),
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => Navigator.pop(context),
+        icon: const Icon(Icons.arrow_back),
+        label: const Text('Volver'),
+      ),
+    );
+  }
+}
+
+
+class AboutPage extends StatelessWidget {
+  const AboutPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Acerca de'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.deepPurple,
+                child: Icon(Icons.android, size: 50, color: Colors.white),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'Mi App Flutter',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+
+              const Chip(
+                label: Text('Versión 1.0.0'),
+                backgroundColor: Colors.deepPurple,
+                labelStyle: TextStyle(color: Colors.white),
+              ),
+              // ────────────────────────────────────────
+
+              const SizedBox(height: 16),
+              const Text(
+                'Para App distribution',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey),
+              ),
+              const SizedBox(height: 32),
+              const Divider(),
+              const SizedBox(height: 16),
+              _infoRow(Icons.person, 'Autor', 'Kevin Andres Montes Camelo'),
+              _infoRow(Icons.school, 'Asignatura', 'ELECTIVA PROFESIONAL I'),
+              _infoRow(Icons.calendar_today, 'Fecha', '02/05/2026'),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoRow(IconData icon, String label, String value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Row(
+        children: [
+          Icon(icon, color: Colors.deepPurple, size: 20),
+          const SizedBox(width: 12),
+          Text('$label: ', style: const TextStyle(fontWeight: FontWeight.bold)),
+          Text(value),
+        ],
       ),
     );
   }
