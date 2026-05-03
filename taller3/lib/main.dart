@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'App Distribución v1.0.0',
+      title: 'App Distribución v1.0.1',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
@@ -163,7 +163,7 @@ class AboutPage extends StatelessWidget {
               const SizedBox(height: 8),
 
               const Chip(
-                label: Text('Versión 1.0.0'),
+                label: Text('Versión 1.0.1'),
                 backgroundColor: Colors.deepPurple,
                 labelStyle: TextStyle(color: Colors.white),
               ),
