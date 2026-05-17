@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "162507650416",
+    "project_id": "taller-universidades",
+    "storage_bucket": "taller-universidades.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:162507650416:android:83a9e82942a07aacb04bb5",
+        "android_client_info": {
+          "package_name": "com.example.taller_firebase_universidades"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALjCb70lHiFICH87PURm-bcTX8Ii1Hzvo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
